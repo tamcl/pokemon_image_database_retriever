@@ -50,7 +50,8 @@ def getPoke(pokemonIndex):
             urllib.request.urlretrieve(l,'DB/'+'{}-{}.{}'.format(pokemonIndex, count,linkFormat))
         count+=1
 
-for index in range(3):
+#you can chnage the range right here to get the pokemon you want
+for index in range(gen1):
     pokemonIndex = index+1
     getPoke(pokemonIndex)
     
