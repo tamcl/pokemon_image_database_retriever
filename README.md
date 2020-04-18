@@ -1,6 +1,6 @@
-install Pillow \n
-install numpy\n
-install re\n
+install Pillow 
+install numpy
+install re
 
 to run type 
 ```
