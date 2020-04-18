@@ -1,7 +1,10 @@
 import urllib.request
 
-def download(path, filename, url):
-    p = path
+def download(comin):
+    url, index, iden, formatFile = comin
+    path = 'DB'
+    filename = '{}-{}.{}'.format(index,iden,formatFile)
+    p = 'DB'
     if path[-1] != '/':
         p += '/'
     p+=filename
@@ -9,5 +12,6 @@ def download(path, filename, url):
         urllib.request.urlretrieve(url,p)
         #print("OK: {}".format(url))
     except:
-        # print("Fail: {}".format(url))
+        #print("Fail: {}".format(url))
         pass
+        
