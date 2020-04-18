@@ -16,3 +16,5 @@ gather is to download the images (links with resear)\
 Filter is to remove images that is higher than threshold
 
 threshold can be adjust in line 97
+
+To increase search result you can add more parameters for search key words on line 31
