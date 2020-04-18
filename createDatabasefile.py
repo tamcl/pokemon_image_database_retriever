@@ -8,45 +8,49 @@ from PIL import Image
 gen1 = 151
 path = 'standard/'
 def createStandardFiles(path=path):
-    print('initiate database')
+    print('initiate {}'.format(path))
     try:
         os.mkdir(path)
     except:
-        print('"{}" branch already exist'.format(path))
+        pass
+        #print('"{}" branch already exist'.format(path))
     p = path
     for i in range(gen1):
         try:
             os.mkdir(p+str(i+1))
         except:
-            print('{} is already been created'.format(i+1))
+            pass
+            #print('{} is already been created'.format(i+1))
         
-def extractimg():
-    for i in range(gen1):
+def extractimg(i):
+    try:
         if 'serebii-pokemon-art-{}.png'.format(i+1) not in os.listdir(path+'{}/'.format(i+1)):
             urllib.request.urlretrieve('https://www.serebii.net/pokemon/art/{}.png'.format(str(i+1+1000)[1:]),path+'{}/serebii-pokemon-art-{}.png'.format(i+1,i+1))
+    except:
+        pass
+    try:
         if 'serebii-pokearth-sprites-dp-{}.png'.format(i+1) not in os.listdir(path+'{}/'.format(i+1)):
             urllib.request.urlretrieve('https://www.serebii.net/pokearth/sprites/dp/{}.png'.format(str(i+1+1000)[1:]),path+'{}/serebii-pokearth-sprites-dp-{}.png'.format(i+1,i+1))
+    except:
+        pass
+    try:
         if 'serebii-pokearth-sprites-hgss-{}.png'.format(i+1) not in os.listdir(path+'{}/'.format(i+1)):
             urllib.request.urlretrieve('https://www.serebii.net/pokearth/sprites/hgss/{}.png'.format(str(i+1+1000)[1:]),path+'{}/serebii-pokearth-sprites-hgss-{}.png'.format(i+1,i+1))
+    except:
+        pass
+    try:
         if 'serebii-pokemon-blackwhite-{}.png'.format(i+1) not in os.listdir(path+'{}/'.format(i+1)):
             urllib.request.urlretrieve('https://www.serebii.net/blackwhite/pokemon/{}.png'.format(str(i+1+1000)[1:]),path+'{}/serebii-pokemon-blackwhite-{}.png'.format(i+1,i+1))
+    except:
+        pass
         # print('standard {} complete download'.format(str(i+1+1000)[1:]))
 
-def compare(pokeIndex, url):
-    if 'test' not in os.listdir():
-        os.mkdir('test')
-    else:
-        shutil.rmtree('test')
-        os.mkdir('test')
-    param = len(url.split('.'))
-    fileformat = url.split('.')[param-1]
+def compare(pokeIndex, path, threshold):
     try:
-        urllib.request.urlretrieve(url, 'test/test.'+fileformat)
-        test = 'test/test.'+fileformat
         minimum = 0
         maximum = 0
         start = True
-        test = np.array(organise.crop(Image.open(test)))
+        test = np.array(organise.crop(Image.open(path)))
         for standardI in os.listdir(path+'{}/'.format(pokeIndex)):
             target = Image.open(path+'{}/'.format(pokeIndex)+standardI)
             target = np.array(organise.crop(target))
@@ -63,7 +67,8 @@ def compare(pokeIndex, url):
                     minimum = result
                 if result > maximum:
                     maximum = result
-        shutil.rmtree('test')
+        if threshold < minimum:
+            os.remove(path)
         return (minimum, maximum)
     except:
         return(0,99999999999999999999)
