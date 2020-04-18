@@ -27,7 +27,7 @@ gen1 = 151
 pokeapi = 'https://pokeapi.co/api/v2/pokemon/'
 log = ''
 threshold = 100000000
-
+formatAllow = ['jpg', 'jpeg', 'png', 'PNG', 'JPG', 'JPEG']
 def getPoke(pokemonIndex):
     global log
     pokemonInfo = getJson(pokeapi+str(pokemonIndex))
@@ -38,19 +38,21 @@ def getPoke(pokemonIndex):
         links += searchFile.find(search)
     for l in links:
         linkFormat = l.split('.')[len(l.split('.'))-1]
-        Mini, Maxi = createDatabasefile.compare(pokemonIndex, l)
-        if Maxi > threshold:
-            print("Fail: {}||{}||{}||count:{}| SSD:{} {}".format(l,pokemonInfo["name"], pokemonIndex,count,Mini,Maxi))
-            log+="Fail: {}||{}||{}||count:{}| SSD:{} {}".format(l,pokemonInfo["name"], pokemonIndex,count,Mini,Maxi)
-            log += '\n'
+        if linkFormat in formatAllow:
+            Mini, Maxi = createDatabasefile.compare(pokemonIndex, l)
+            if Maxi > threshold:
+                print("Fail: {}||{}||{}||count:{}| SSD:{} {}".format(l,pokemonInfo["name"], pokemonIndex,count,Mini,Maxi))
+                log+="Fail: {}||{}||{}||count:{}| SSD:{} {}".format(l,pokemonInfo["name"], pokemonIndex,count,Mini,Maxi)
+                log += '\n'
+            else:
+                print("OK: {} retrieved as database of {} Pokedex No.{}|| SSD:{} {}".format(l,pokemonInfo["name"],pokemonIndex,Mini,Maxi))
+                log += "OK: {} retrieved as database of {} Pokedex No.{}|| SSD:{} {}".format(l,pokemonInfo["name"],pokemonIndex,Mini,Maxi)
+                log += '\n'
+                urllib.request.urlretrieve(l,'DB/'+'{}-{}.{}'.format(pokemonIndex, count,linkFormat))
         else:
-            print("OK: {} retrieved as database of {} Pokedex No.{}|| SSD:{} {}".format(l,pokemonInfo["name"],pokemonIndex,Mini,Maxi))
-            log += "OK: {} retrieved as database of {} Pokedex No.{}|| SSD:{} {}".format(l,pokemonInfo["name"],pokemonIndex,Mini,Maxi)
-            log += '\n'
-            urllib.request.urlretrieve(l,'DB/'+'{}-{}.{}'.format(pokemonIndex, count,linkFormat))
+            log+="Fail: {} incorrect format".format(l)
         count+=1
 
-#you can chnage the range right here to get the pokemon you want
 for index in range(gen1):
     pokemonIndex = index+1
     getPoke(pokemonIndex)
