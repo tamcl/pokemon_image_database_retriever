@@ -59,4 +59,4 @@ for index in range(gen1):
     #TODO if pass threshold save in the folder
 
 file = open('log.txt','wb')
-file.write(log)
+file.write(log.encode('UTF-8'))
